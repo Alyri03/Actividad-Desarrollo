@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Consultas de Tareas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light py-5">
+
+<div class="container">
+    <nav class="mb-4">
+        <a href="/tasks" class="btn btn-outline-primary me-2">Ver todas las tareas</a>
+        <a href="/tasks/new" class="btn btn-outline-success">Crear nueva tarea</a>
+    </nav>
+
+    <h2 class="mb-4 text-primary">Consultas Avanzadas de Tareas</h2>
+
+    <!-- Sección de cada consulta -->
+    <div class="row g-4">
+        <!-- 1. Tareas por Empleado -->
+        <div class="col-md-6">
+            <div class="card p-3 shadow-sm">
+                <h5 class="card-title">1. Tareas por Empleado</h5>
+                <form th:action="@{/tasks/by-employee}" method="post">
+                    <select class="form-select mb-2" name="employeeId" required>
+                        <option value="">-- Seleccione --</option>
+                        <option th:each="emp : ${employees}"
+                                th:value="${emp.id}"
+                                th:text="${emp.nombres + ' (' + emp.cargo + ')'}"></option>
+                    </select>
+                    <button class="btn btn-primary w-100">Buscar</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- 2. Tareas por Estado -->
+        <div class="col-md-6">
+            <div class="card p-3 shadow-sm">
+                <h5 class="card-title">2. Tareas por Estado</h5>
+                <form th:action="@{/tasks/by-status}" method="post">
+                    <select class="form-select mb-2" name="status" required>
+                        <option value="">-- Seleccione --</option>
+                        <option value="Pendiente">Pendiente</option>
+                        <option value="En progreso">En progreso</option>
+                        <option value="Completada">Completada</option>
+                        <option value="Cancelada">Cancelada</option>
+                    </select>
+                    <button class="btn btn-primary w-100">Buscar</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- 3. Tareas por Cargo -->
+        <div class="col-md-6">
+            <div class="card p-3 shadow-sm">
+                <h5 class="card-title">3. Tareas por Cargo del Empleado</h5>
+                <form th:action="@{/tasks/by-position}" method="post">
+                    <input class="form-control mb-2" type="text" name="cargo" placeholder="Ej: Chofer, Gerente" required>
+                    <button class="btn btn-primary w-100">Buscar</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- 4. Conteo de Tareas -->
+        <div class="col-md-6">
+            <div class="card p-3 shadow-sm text-center">
+                <h5 class="card-title">4. Conteo de Tareas por Empleado</h5>
+                <form th:action="@{/tasks/count-tasks}" method="get">
+                    <button class="btn btn-secondary w-100">Mostrar Conteo</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- 5. Tareas por Sueldo -->
+        <div class="col-md-6">
+            <div class="card p-3 shadow-sm">
+                <h5 class="card-title">5. Tareas con Sueldo Mayor a</h5>
+                <form th:action="@{/tasks/by-salary}" method="post">
+                    <input class="form-control mb-2" type="number" name="minSalary" step="0.01" min="0" placeholder="Ej: 3000.50" required>
+                    <button class="btn btn-primary w-100">Buscar</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- 6. Tareas Vencidas -->
+        <div class="col-md-6">
+            <div class="card p-3 shadow-sm text-center">
+                <h5 class="card-title">6. Tareas Vencidas</h5>
+                <form th:action="@{/tasks/overdue-tasks}" method="get">
+                    <button class="btn btn-danger w-100">Mostrar Tareas Vencidas</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- 7. Alta Prioridad por Cargo -->
+        <div class="col-md-6">
+            <div class="card p-3 shadow-sm">
+                <h5 class="card-title">7. Alta Prioridad por Cargo</h5>
+                <form th:action="@{/tasks/high-priority}" method="post">
+                    <input class="form-control mb-2" type="text" name="cargo" placeholder="Ej: Chofer" required>
+                    <button class="btn btn-primary w-100">Buscar</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- 8. Rango de Fechas -->
+        <div class="col-md-6">
+            <div class="card p-3 shadow-sm">
+                <h5 class="card-title">8. Tareas por Rango de Fechas</h5>
+                <form th:action="@{/tasks/by-date-range}" method="post">
+                    <input class="form-control mb-2" type="date" name="startDate" required>
+                    <input class="form-control mb-2" type="date" name="endDate" required>
+                    <button class="btn btn-primary w-100">Buscar</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- 9. Empleados con muchas tareas -->
+        <div class="col-md-6">
+            <div class="card p-3 shadow-sm">
+                <h5 class="card-title">9. Empleados con más de X Tareas</h5>
+                <form th:action="@{/tasks/busy-employees}" method="post">
+                    <input class="form-control mb-2" type="number" name="minTasks" min="1" placeholder="Ej: 5" required>
+                    <button class="btn btn-primary w-100">Buscar</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- 10. Tareas Pendientes DTO -->
+        <div class="col-md-6">
+            <div class="card p-3 shadow-sm text-center">
+                <h5 class="card-title">10. Tareas Pendientes (DTO)</h5>
+                <form th:action="@{/tasks/pending-tasks}" method="get">
+                    <button class="btn btn-info text-white w-100">Mostrar Pendientes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
